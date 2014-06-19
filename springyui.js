@@ -296,28 +296,36 @@ jQuery.fn.springy = function(params) {
 
 			ctx.save();
 
-			// Pulled out the padding aspect sso that the size functions could be used in multiple places
-			// These should probably be settable by the user (and scoped higher) but this suffices for now
-			var paddingX = 6;
-			var paddingY = 6;
+			var padding = (node.data.padding !== undefined) ? node.data.padding : 6;
 
 			var contentWidth = node.getWidth();
 			var contentHeight = node.getHeight();
-			var boxWidth = contentWidth + paddingX;
-			var boxHeight = contentHeight + paddingY;
+			var boxWidth = contentWidth + padding;
+			var boxHeight = contentHeight + padding;
 
 			// clear background
 			ctx.clearRect(s.x - boxWidth/2, s.y - boxHeight/2, boxWidth, boxHeight);
 
 			// fill background
+
+			// if node is CLICKED
 			if (selected !== null && selected.node !== null && selected.node.id === node.id) {
-				ctx.fillStyle = "#FFFFE0";
-			} else if (nearest !== null && nearest.node !== null && nearest.node.id === node.id) {
-				ctx.fillStyle = "#EEEEEE";
+				ctx.strokeStyle = "#000000";
+
+			// if node is HOVERED
+			/*} else if (nearest !== null && nearest.node !== null && nearest.node.id === node.id) {
+				ctx.strokeStyle = "#EEEEEE";*/
+
+			// OTHERWISE (default)
 			} else {
-				ctx.fillStyle = "#FFFFFF";
+				ctx.strokeStyle  = (node.data.color !== undefined) ? node.data.color : "#FFFFFF";
+				//ctx.fillStyle = "#FFFFFF";
 			}
-			ctx.fillRect(s.x - boxWidth/2, s.y - boxHeight/2, boxWidth, boxHeight);
+			ctx.strokeRect(s.x - boxWidth/2, s.y - boxHeight/2, boxWidth, boxHeight);
+			if(node.data.eligible == "done"){
+			    ctx.fillStyle = node.data.color;
+			    ctx.fillRect(s.x - boxWidth/2, s.y - boxHeight/2, boxWidth, boxHeight);
+			}
 
 			if (node.data.image == undefined) {
 				ctx.textAlign = "left";
